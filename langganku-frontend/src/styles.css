@@ -1444,3 +1444,128 @@ a {
     transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   }
 }
+
+/* ---------- panel langganan dibatalkan (auto-hapus 30 hari) ---------- */
+.cancel-panel {
+  background: var(--surface);
+  border: 1.5px solid #f5c6c6;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.cancel-panel-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px 24px 16px;
+  background: #fff8f8;
+  border-bottom: 1px solid #f5c6c6;
+}
+.cancel-panel-icon {
+  font-size: 24px;
+  line-height: 1;
+  flex: none;
+  margin-top: 2px;
+}
+.cancel-panel-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--danger);
+  margin-bottom: 4px;
+}
+.cancel-panel-desc {
+  font-size: 13px;
+  color: var(--muted-strong);
+}
+.cancel-list {
+  display: flex;
+  flex-direction: column;
+}
+.cancel-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 1.6fr) 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px;
+  border-top: 1px solid var(--line-soft);
+  transition: background 0.15s;
+}
+.cancel-row:first-child {
+  border-top: none;
+}
+.cancel-row-urgent {
+  background: #fff5f5;
+}
+.cancel-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.cancel-name {
+  font-weight: 600;
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted-strong);
+  text-decoration: line-through;
+}
+.cancel-cat {
+  font-size: 12px;
+  color: var(--muted);
+}
+.cancel-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+.cancel-bar-bg {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--line-soft);
+  overflow: hidden;
+}
+.cancel-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease, background 0.4s ease;
+}
+.cancel-sisa {
+  font-size: 12px;
+  font-weight: 600;
+}
+.cancel-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+/* badge merah di chip filter Dibatalkan */
+.chip-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--danger);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  margin-left: 2px;
+}
+@media (max-width: 720px) {
+  .cancel-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+  .cancel-actions {
+    justify-content: flex-start;
+  }
+  .cancel-panel-head {
+    padding: 16px;
+  }
+}

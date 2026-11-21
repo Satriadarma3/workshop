@@ -53,6 +53,19 @@ export const sortSubscriptions = (subs) =>
       a.next_billing_date.localeCompare(b.next_billing_date),
   );
 
+/** Jumlah hari sejak tanggal ISO (misalnya cancelled_at). Positif = sudah lewat. */
+export function daysSince(isoString) {
+  if (!isoString) return 0;
+  const t = new Date();
+  const today = new Date(t.getFullYear(), t.getMonth(), t.getDate());
+  const from = new Date(isoString);
+  const fromDay = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+  return Math.round((today - fromDay) / 86400000);
+}
+
+/** Sisa hari sebelum dihapus (dari waktu dibatalkan + 30 hari). */
+export const daysUntilDeletion = (cancelledAt) => Math.max(0, 30 - daysSince(cancelledAt));
+
 export function greeting(date = new Date()) {
   const h = date.getHours();
   if (h < 11) return 'Selamat pagi';

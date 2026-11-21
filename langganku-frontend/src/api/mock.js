@@ -26,7 +26,12 @@ const DEFAULT_CATEGORIES = [
 function load() {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const db = JSON.parse(raw);
+      // Auto-purge setiap kali data dibuka
+      if (purgeExpiredCancellations(db)) save(db);
+      return db;
+    }
   } catch {
     /* mulai dari awal */
   }
@@ -71,6 +76,8 @@ function seedSubscriptions(db, userId) {
     ['Xbox Game Pass', 'Game', 79000, 'MONTHLY', -20, 'CANCELLED', 'Berhenti sejak bulan lalu'],
   ];
   rows.forEach(([service_name, category, price, billing_cycle, offset, status, notes]) => {
+    // cancelled_at = sekarang - 5 hari (untuk data contoh CANCELLED)
+    const cancelledAt = status === 'CANCELLED' ? new Date(Date.now() - 5 * 86400000).toISOString() : null;
     db.subscriptions.push({
       id: uid(),
       user_id: userId,
@@ -81,6 +88,7 @@ function seedSubscriptions(db, userId) {
       next_billing_date: day(offset),
       status,
       notes,
+      cancelled_at: cancelledAt,
       created_at: now,
       updated_at: now,
     });
@@ -119,6 +127,19 @@ function validateCategory(input, db, selfId = null) {
   if (db.categories.some((c) => c.id !== selfId && c.name.toLowerCase() === name.toLowerCase()))
     throw new ApiError('Nama kategori sudah dipakai.', 409, { name: 'Nama kategori sudah dipakai.' });
   return { name, icon: input.icon || 'tag' };
+}
+
+/** Hapus langganan CANCELLED yang sudah > 30 hari sejak dibatalkan. */
+function purgeExpiredCancellations(db) {
+  const LIMIT_MS = 30 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+  const before = db.subscriptions.length;
+  db.subscriptions = db.subscriptions.filter((s) => {
+    if (s.status !== 'CANCELLED') return true;
+    if (!s.cancelled_at) return true; // data lama tanpa cancelled_at: biarkan
+    return now - new Date(s.cancelled_at).getTime() < LIMIT_MS;
+  });
+  return db.subscriptions.length < before; // true kalau ada yang terpangkas
 }
 
 export function createMockApi() {
@@ -222,7 +243,15 @@ export function createMockApi() {
         const db = load();
         const user = currentUser(db);
         const now = new Date().toISOString();
-        const sub = { id: uid(), user_id: user.id, ...validateSubscription(input, db), created_at: now, updated_at: now };
+        const validated = validateSubscription(input, db);
+        const sub = {
+          id: uid(),
+          user_id: user.id,
+          ...validated,
+          cancelled_at: validated.status === 'CANCELLED' ? now : null,
+          created_at: now,
+          updated_at: now,
+        };
         db.subscriptions.push(sub);
         save(db);
         return sub;
@@ -233,7 +262,16 @@ export function createMockApi() {
         const user = currentUser(db);
         const sub = db.subscriptions.find((s) => s.id === id && s.user_id === user.id);
         if (!sub) throw new ApiError('Langganan tidak ditemukan.', 404);
-        Object.assign(sub, validateSubscription(input, db), { updated_at: new Date().toISOString() });
+        const validated = validateSubscription(input, db);
+        // Set cancelled_at hanya saat pertama kali status berubah ke CANCELLED
+        const cancelledAt =
+          validated.status === 'CANCELLED'
+            ? (sub.cancelled_at || new Date().toISOString()) // jaga jika sudah ada
+            : null; // reset jika diaktifkan kembali
+        Object.assign(sub, validated, {
+          cancelled_at: cancelledAt,
+          updated_at: new Date().toISOString(),
+        });
         save(db);
         return sub;
       },
