@@ -9,7 +9,7 @@ Mini project Workshop JavaScript, dikerjakan oleh:
 | Satria Adidarma Herrinta | H1D026144 |
 | MIFTACHUDDIN ACHMAD  | H1D026104 |
 
-![Halaman daftar Langganan](docs/screenshots/Home.png)
+![Halaman daftar Langganan](Docs/screenshots/Home.png)
 
 ## Fitur
 
@@ -21,9 +21,9 @@ Mini project Workshop JavaScript, dikerjakan oleh:
 
 <table>
   <tr>
-    <td><img src="docs/screenshots/Home.png" alt="Halaman daftar" /></td>
-    <td><img src="docs/screenshots/langganan.png" alt="Form ubah barang" /></td>
-    <td width="28%"><img src="docs/screenshots/TYPE_h.png" alt="Tampilan HP" /></td>
+    <td><img src="Docs/screenshots/Home.png" alt="Halaman daftar" /></td>
+    <td><img src="Docs/screenshots/langganan.png" alt="Form ubah barang" /></td>
+    <td width="28%"><img src="Docs/screenshots/TYPE_h.png" alt="Tampilan HP" /></td>
   </tr>
 </table>
 
