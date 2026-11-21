@@ -1,6 +1,6 @@
 # AturKost
 
-Catatan inventaris kamar kost. Mahasiswa bisa mencatat barang apa saja yang ada di kamarnya: jumlah, kategori, lokasi, dan kondisinya. Barang yang rusak atau perlu servis langsung terlihat.
+Catatan daftar Langggaku. Mahasiswa bisa mencatat sebuah Langgan app yang perlu di bayar perbulan/year.
 
 Mini project Workshop JavaScript, dikerjakan oleh:
 
