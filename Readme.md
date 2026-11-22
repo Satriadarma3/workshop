@@ -1,4 +1,4 @@
-# AturKost
+# Langganku
 
 Catatan daftar Langggaku. Mahasiswa bisa mencatat sebuah Langgan app yang perlu di bayar perbulan/year.
 
